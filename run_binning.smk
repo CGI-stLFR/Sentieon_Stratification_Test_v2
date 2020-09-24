@@ -1,14 +1,20 @@
+# Don Freed at Sentieon wrote most of this and should be able to answer questions
+# the only real difference between this and the last version is how variants are defined
 
 import os.path
 
 configfile: "run_binning.config"
 
+# create a dict of stratification names and paths
 stratification_map = {}
+# strat region tsv contains mappings of names to files
 with open(config["stratification_region_tsv"]) as fh:
   for line in fh:
     name, strat_bed = line.rstrip().split('\t')
     stratification_map[name] = config["stratification_bed_dir"] + '/' + strat_bed
 
+
+# define all desired output files
 def get_all_output_files():
   '''
   Find all of the expected outputs
@@ -26,6 +32,8 @@ def get_all_output_files():
   print(expected_files)
   return expected_files
 
+
+# rule for all targets
 rule all:
   input:
     all_outputs = get_all_output_files()
